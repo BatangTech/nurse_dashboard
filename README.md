@@ -1,16 +1,49 @@
-# dashboard_2
+<h1>🚀 How to Run Flutter Web</h1>
 
-A new Flutter project.
+<h2>📱 Frontend (Flutter Web)</h2>
 
-## Getting Started
+<ol>
+  <li>Install dependencies</li>
+</ol>
 
-This project is a starting point for a Flutter application.
+<pre><code>
+flutter pub get
+</code></pre>
 
-A few resources to get you started if this is your first Flutter project:
+<ol start="2">
+  <li>Set up Firebase</li>
+  <p>Download your <code>google-services.json</code> file from Firebase Console and place it inside the <code>web/</code> directory.</p>
+</ol>
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+<ol start="3">
+  <li>Enable Flutter web support (if not enabled)</li>
+</ol>
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<pre><code>
+flutter config --enable-web
+</code></pre>
+
+<ol start="4">
+  <li>Run the app on a web browser</li>
+</ol>
+
+<pre><code>
+flutter run -d chrome
+</code></pre>
+
+<ol start="5">
+  <li>Build for web deployment</li>
+</ol>
+
+<pre><code>
+flutter build web
+</code></pre>
+
+<ol start="6">
+  <li>Serve the built web app locally (optional)</li>
+</ol>
+
+<pre><code>
+flutter serve
+</code></pre>
+
