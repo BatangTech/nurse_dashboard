@@ -9,8 +9,8 @@ void main() async {
           apiKey: "AIzaSyDTccw-bA9QTyCaxvwlbWKYMyLS3x1a4KM",
           projectId: "ncds-user-app",
           messagingSenderId: "647448783618",
-         appId: "1:647448783618:web:8eedcca497bfbdb370f01b"));
-         
+          appId: "1:647448783618:web:8eedcca497bfbdb370f01b"));
+
   runApp(const MyApp());
 }
 
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.indigo,
         scaffoldBackgroundColor: Colors.grey[50],
       ),
-      home: const LoginPage(), // เริ่มต้นแสดง LoginPage
+      home: const LoginPage(),
     );
   }
 }

@@ -13,17 +13,14 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   int _selectedIndex = 0;
 
-  // สร้าง list ของ widgets สำหรับแต่ละหน้า
-
   final List<Widget> _pages = [
     const DashboardContent(),
     const ChatContent(),
-    const TablePage(), // เพิ่ม TablePage
+    const TablePage(),
   ];
 
   void _handleNavigation(int index) {
     if (index == 3) {
-      // Index สำหรับ Sign Out
       _handleSignOut();
       return;
     }
@@ -33,7 +30,6 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   void _handleSignOut() {
-    // นำผู้ใช้กลับไปยังหน้า Login
     Navigator.pushReplacementNamed(context, '/');
   }
 
@@ -42,7 +38,6 @@ class _DashboardPageState extends State<DashboardPage> {
     return Scaffold(
       body: Row(
         children: [
-          // Side Navigation
           Container(
             width: 200,
             color: Colors.white,
@@ -65,7 +60,6 @@ class _DashboardPageState extends State<DashboardPage> {
               ],
             ),
           ),
-          // Main Content
           Expanded(
             child: _pages[_selectedIndex],
           ),

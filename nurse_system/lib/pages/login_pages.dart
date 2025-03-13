@@ -1,4 +1,3 @@
-// lib/pages/login_page.dart
 import 'package:flutter/material.dart';
 import 'dashboard_pages.dart';
 
@@ -22,8 +21,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _handleLogin() {
-    // ในที่นี้เราจะไม่ตรวจสอบ credentials จริงๆ
-    // แต่ในการใช้งานจริงควรมีการตรวจสอบ
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const DashboardPage()),

@@ -43,8 +43,6 @@ class TablePage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-
-            // กราฟ Earnings & Conversions
             Row(
               children: [
                 Expanded(child: _buildEarningsChart()),
@@ -58,7 +56,6 @@ class TablePage extends StatelessWidget {
     );
   }
 
-  // ส่วนหัวของตาราง
   Widget _buildTableHeader() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -71,7 +68,6 @@ class TablePage extends StatelessWidget {
     );
   }
 
-  // แถวของข้อมูลในตาราง
   Widget _buildTableRow(
       String name, String status, String date, IconData icon) {
     return Row(
@@ -132,7 +128,6 @@ class TablePage extends StatelessWidget {
     );
   }
 
-  // กราฟ Conversions
   Widget _buildConversionsChart() {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -185,7 +180,6 @@ class TablePage extends StatelessWidget {
     );
   }
 
-  // กล่องตกแต่ง UI
   BoxDecoration _boxDecoration() {
     return BoxDecoration(
       color: Colors.white,
