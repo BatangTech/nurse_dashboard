@@ -1,190 +1,103 @@
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
 
-class TablePage extends StatelessWidget {
+import '../components/table/header.dart';
+import '../components/table/overview_cards.dart';
+import '../components/table/user_table_section.dart';
+import '../models/user_model.dart';
+import '../services/firebase_service.dart';
+
+
+
+class TablePage extends StatefulWidget {
   const TablePage({super.key});
+
+  @override
+  State<TablePage> createState() => _TablePageState();
+}
+
+class _TablePageState extends State<TablePage> {
+  // สถานะสำหรับเก็บข้อมูลจาก Firestore
+  List<UserModel> users = [];
+  List<UserModel> highRiskUsers = [];
+  List<UserModel> lowRiskUsers = [];
+  bool isLoading = true;
+  
+  final FirebaseService _firebaseService = FirebaseService();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  // ดึงข้อมูลจาก Firestore
+  Future<void> fetchData() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      final result = await _firebaseService.fetchAllUserData();
+      
+      setState(() {
+        users = result['users']!;
+        highRiskUsers = result['highRiskUsers']!;
+        lowRiskUsers = result['lowRiskUsers']!;
+        isLoading = false;
+      });
+    } catch (e) {
+      print('Error fetching data: $e');
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Complex Table",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-
-            // ตารางข้อมูล
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(color: Colors.black12, blurRadius: 5),
-                ],
-              ),
-              child: Column(
-                children: [
-                  _buildTableHeader(),
-                  const Divider(),
-                  _buildTableRow(
-                    "่Jason Ray",
-                    "Green zone",
-                    "12 Jul 2023",
-                    Icons.refresh,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(child: _buildEarningsChart()),
-                const SizedBox(width: 16),
-                Expanded(child: _buildConversionsChart()),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTableHeader() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: const [
-        Text("NAME", style: TextStyle(fontWeight: FontWeight.bold)),
-        Text("STATUS", style: TextStyle(fontWeight: FontWeight.bold)),
-        Text("DATE", style: TextStyle(fontWeight: FontWeight.bold)),
-        Text("Chat", style: TextStyle(fontWeight: FontWeight.bold)),
-      ],
-    );
-  }
-
-  Widget _buildTableRow(
-      String name, String status, String date, IconData icon) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(name),
-        Row(
-          children: [
-            Icon(Icons.circle, color: Colors.green, size: 12),
-            const SizedBox(width: 5),
-            Text(status, style: TextStyle(color: Colors.green)),
-          ],
-        ),
-        Text(date),
-        Icon(icon, color: Colors.blue),
-      ],
-    );
-  }
-
-  // กราฟ Earnings
-  Widget _buildEarningsChart() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: _boxDecoration(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text("Earnings", style: TextStyle(fontWeight: FontWeight.bold)),
-          const SizedBox(height: 10),
-          SizedBox(
-            height: 150,
-            child: PieChart(
-              PieChartData(
-                sections: [
-                  PieChartSectionData(
-                      value: 80,
-                      color: const Color.fromARGB(255, 33, 195, 52),
-                      title: "80%"),
-                  PieChartSectionData(
-                      value: 60, color: Colors.red, title: "60%"),
-                ],
-                sectionsSpace: 2,
-                centerSpaceRadius: 30,
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("Green zone 80%",
-                  style: TextStyle(color: Color.fromARGB(255, 43, 180, 16))),
-              Text("Red zone 60%", style: TextStyle(color: Colors.red)),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildConversionsChart() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: _boxDecoration(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text("Conversions",
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          const SizedBox(height: 10),
-          SizedBox(
-            height: 150,
-            child: BarChart(
-              BarChartData(
-                barGroups: List.generate(7, (index) {
-                  return BarChartGroupData(
-                    x: index,
-                    barRods: [
-                      BarChartRodData(
-                          toY: (index + 1) * 20.0,
-                          color: Colors.blue,
-                          width: 10),
-                      BarChartRodData(
-                          toY: (index + 1) * 10.0,
-                          color: Colors.lightBlue,
-                          width: 10),
+      backgroundColor: const Color(0xFFF5F7FF),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : RefreshIndicator(
+                  onRefresh: fetchData,
+                  color: const Color(0xFF6C63FF),
+                  child: ListView(
+                    children: [
+                      const Header(
+                        title: "Risk Zone Monitor",
+                        subtitle: "แดชบอร์ดติดตามผู้ใช้งานตามระดับความเสี่ยง",
+                      ),
+                      const SizedBox(height: 20),
+                      OverviewCards(
+                        totalUsers: users.length,
+                        lowRiskUsers: lowRiskUsers.length,
+                        highRiskUsers: highRiskUsers.length,
+                      ),
+                      const SizedBox(height: 20),
+                      UserTableSection(
+                        title: "Red Zone Users",
+                        subtitle: "ผู้ใช้ในพื้นที่เสี่ยงสูง",
+                        users: highRiskUsers,
+                        statusColor: const Color(0xFFFF5252),
+                        icon: Icons.warning_rounded,
+                      ),
+                      const SizedBox(height: 20),
+                      UserTableSection(
+                        title: "Green Zone Users",
+                        subtitle: "ผู้ใช้ในพื้นที่ปลอดภัย",
+                        users: lowRiskUsers,
+                        statusColor: const Color(0xFF4CAF50),
+                        icon: Icons.shield_rounded,
+                      ),
                     ],
-                  );
-                }),
-                titlesData: FlTitlesData(
-                  leftTitles: AxisTitles(),
-                  bottomTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      getTitlesWidget: (value, meta) {
-                        List<String> days = ["S", "M", "T", "W", "T", "F", "S"];
-                        return Text(days[value.toInt()],
-                            style: TextStyle(fontSize: 12));
-                      },
-                    ),
                   ),
                 ),
-                borderData: FlBorderData(show: false),
-                gridData: FlGridData(show: false),
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
-    );
-  }
-
-  BoxDecoration _boxDecoration() {
-    return BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(10),
-      boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)],
     );
   }
 }

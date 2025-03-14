@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../constants/colors.dart';
+import '../../constants/colors.dart';
 
 class StatCard extends StatelessWidget {
   final IconData icon;

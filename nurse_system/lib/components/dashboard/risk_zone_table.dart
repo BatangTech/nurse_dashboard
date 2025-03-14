@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../constants/colors.dart';
-import '../utils/date_formatter.dart';
+import '../../constants/colors.dart';
+import '../../utils/date_formatter.dart';
 import 'card_container.dart';
 import 'risk_badge.dart';
 

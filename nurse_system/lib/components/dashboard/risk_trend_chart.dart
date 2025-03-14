@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:nurse_system/components/area_chart.dart';
-import 'package:nurse_system/components/card_container.dart';
-import 'package:nurse_system/components/risk_indicator.dart';
-import 'package:nurse_system/components/time_filter_chip.dart';
-import '../constants/colors.dart';
+import 'package:nurse_system/components/dashboard/area_chart.dart';
+import 'package:nurse_system/components/dashboard/card_container.dart';
+import 'package:nurse_system/components/dashboard/risk_indicator.dart';
+import 'package:nurse_system/components/dashboard/time_filter_chip.dart';
+import '../../constants/colors.dart';
 
 class RiskTrendChart extends StatelessWidget {
   const RiskTrendChart({Key? key}) : super(key: key);

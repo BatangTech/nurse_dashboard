@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../components/risk_distribution_cards.dart';
-import '../components/risk_trend_chart.dart';
-import '../components/risk_zone_table.dart';
+import '../components/dashboard/risk_distribution_cards.dart';
+import '../components/dashboard/risk_trend_chart.dart';
+import '../components/dashboard/risk_zone_table.dart';
 import '../constants/colors.dart';
 
 class DashboardContent extends StatefulWidget {
