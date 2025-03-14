@@ -16,7 +16,7 @@ class TableHeader extends StatelessWidget {
             children: [
               const SizedBox(width: 8),
               Flexible(
-                flex: (totalWidth * 0.6).toInt(), // 40% ของพื้นที่
+                flex: (totalWidth * 0.6).toInt(),
                 fit: FlexFit.tight,
                 child: Text(
                   "ชื่อ",
@@ -28,7 +28,7 @@ class TableHeader extends StatelessWidget {
                 ),
               ),
               Flexible(
-                flex: (totalWidth * 0.25).toInt(), // 20% ของพื้นที่
+                flex: (totalWidth * 0.25).toInt(), 
                 fit: FlexFit.tight,
                 child: Text(
                   "สถานะ",
@@ -40,7 +40,7 @@ class TableHeader extends StatelessWidget {
                 ),
               ),
               Flexible(
-                flex: (totalWidth * 0.22).toInt(), // 20% ของพื้นที่
+                flex: (totalWidth * 0.22).toInt(), 
                 fit: FlexFit.tight,
                 child: Text(
                   "คะแนนเสี่ยง",
@@ -52,7 +52,7 @@ class TableHeader extends StatelessWidget {
                 ),
               ),
               Flexible(
-                flex: (totalWidth * 0.15).toInt(), // 20% ของพื้นที่
+                flex: (totalWidth * 0.15).toInt(), 
                 fit: FlexFit.tight,
                 child: Text(
                   "อัพเดทล่าสุด",
