@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nurse_system/pages/chat_pages.dart';
-import 'package:nurse_system/pages/dashboardcontenttable_pages.dart';
+import 'package:nurse_system/pages/dashboard_content.dart';
 import 'package:nurse_system/pages/table_pages.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -15,7 +14,6 @@ class _DashboardPageState extends State<DashboardPage> {
 
   final List<Widget> _pages = [
     const DashboardContent(),
-    const ChatContent(),
     const TablePage(),
   ];
 
@@ -54,9 +52,8 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
                 const SizedBox(height: 32),
                 _buildNavItem(Icons.dashboard, 'Dashboard', 0),
-                _buildNavItem(Icons.chat_bubble_outline, 'Chat', 1),
-                _buildNavItem(Icons.person_outline, 'table', 2),
-                _buildNavItem(Icons.logout, 'Sign Out', 3),
+                _buildNavItem(Icons.person_outline, 'table', 1),
+                _buildNavItem(Icons.logout, 'Sign Out', 2),
               ],
             ),
           ),
