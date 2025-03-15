@@ -1,28 +1,59 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'dart:developer' as developer;
 
 class UserModel {
   final String id;
-  final String userId;
+  final String name;
   final Timestamp? lastActivity;
   final String riskScore;
   final Map<String, dynamic> additionalData;
 
   UserModel({
     required this.id,
-    required this.userId,
+    required this.name,
     this.lastActivity,
     required this.riskScore,
     this.additionalData = const {},
   });
 
-  factory UserModel.fromFirestore(DocumentSnapshot doc) {
+  static Future<UserModel> fromFirestore(DocumentSnapshot doc) async {
     final data = doc.data() as Map<String, dynamic>;
+
+    developer.log('Document ID: ${doc.id}');
+    developer.log('All document data: $data');
+    developer.log('Available keys: ${data.keys.toList()}');
+
+    String? userId = data['user_id'] ?? data['uid'];
+
+    String userName = 'User_${doc.id.substring(0, 5)}';
+
+    if (userId != null) {
+      var userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .get();
+      if (userDoc.exists) {
+        final userData = userDoc.data();
+        userName = userData?['name'] ??
+            userData?['displayName'] ??
+            userData?['fullName'] ??
+            userData?['email'] ??
+            userName;
+      }
+    }
+
+    developer.log('Final selected name: $userName');
+
     return UserModel(
       id: doc.id,
-      userId: data['user_id']?.toString() ?? 'ไม่ระบุชื่อ',
-      lastActivity: data['last_activity'] as Timestamp?,
-      riskScore: data['risk_score']?.toString() ?? 'N/A',
+      name: userName,
+      lastActivity: data['last_activity'] as Timestamp? ??
+          data['lastActive'] as Timestamp? ??
+          data['lastActivity'] as Timestamp?,
+      riskScore: data['risk_score']?.toString() ??
+          data['riskScore']?.toString() ??
+          'N/A',
       additionalData: data,
     );
   }
