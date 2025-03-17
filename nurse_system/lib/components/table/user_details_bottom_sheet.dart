@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../widgets/action_buttons_row.dart';
-import '../../widgets/general_info_section.dart';
-import '../../widgets/medical_info_section.dart';
-import '../../widgets/personal_info_section.dart';
-import '../../widgets/sheet_handle.dart';
-import '../../widgets/user_profile_header.dart';
+import '../../widgets/user_details_bottom_sheet/action_buttons_row.dart';
+import '../../widgets/user_details_bottom_sheet/general_info_section.dart';
+import '../../widgets/user_details_bottom_sheet/medical_info_section.dart';
+import '../../widgets/user_details_bottom_sheet/personal_info_section.dart';
+import '../../widgets/user_details_bottom_sheet/sheet_handle.dart';
+import '../../widgets/user_details_bottom_sheet/user_profile_header.dart';
 
 class UserDetailsBottomSheet extends StatelessWidget {
   final String userId;

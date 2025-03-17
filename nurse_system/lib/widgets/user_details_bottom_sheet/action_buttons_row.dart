@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../pages/risk_level_page.dart';
+import '../../../pages/risk_level_page.dart';
 import 'action_button.dart';
 
 class ActionButtonsRow extends StatelessWidget {

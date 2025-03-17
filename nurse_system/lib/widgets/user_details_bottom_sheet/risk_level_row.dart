@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../pages/risk_level_page.dart';
+import '../../../pages/risk_level_page.dart';
 
 class RiskLevelRow extends StatelessWidget {
   final Map<String, dynamic> userData;
