@@ -4,7 +4,7 @@ import '../../models/user_model.dart';
 import 'table_header.dart';
 import 'table_row.dart';
 
-class UserTableSection extends StatelessWidget {
+class UserTableSection extends StatefulWidget {
   final String title;
   final String subtitle;
   final List<UserModel> users;
@@ -21,10 +21,19 @@ class UserTableSection extends StatelessWidget {
   });
 
   @override
+  _UserTableSectionState createState() => _UserTableSectionState();
+}
+
+class _UserTableSectionState extends State<UserTableSection> {
+  bool showAllUsers = false;
+
+  @override
   Widget build(BuildContext context) {
-    final String status = statusColor == const Color(0xFFFF5252)
+    final String status = widget.statusColor == const Color(0xFFFF5252)
         ? "Red zone"
         : "Green zone";
+    final displayedUsers =
+        showAllUsers ? widget.users : widget.users.take(5).toList();
 
     return Container(
       decoration: BoxDecoration(
@@ -49,7 +58,7 @@ class UserTableSection extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      title,
+                      widget.title,
                       style: GoogleFonts.poppins(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -57,7 +66,7 @@ class UserTableSection extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      subtitle,
+                      widget.subtitle,
                       style: GoogleFonts.kanit(
                         fontSize: 12,
                         color: Colors.grey[600],
@@ -68,17 +77,17 @@ class UserTableSection extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: statusColor.withOpacity(0.1),
+                    color: widget.statusColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Icon(icon, color: statusColor, size: 20),
+                  child: Icon(widget.icon, color: widget.statusColor, size: 20),
                 ),
               ],
             ),
           ),
           const Divider(height: 1, color: Color(0xFFEEEEF0)),
           const TableHeader(),
-          if (users.isEmpty)
+          if (widget.users.isEmpty)
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Center(
@@ -91,32 +100,35 @@ class UserTableSection extends StatelessWidget {
               ),
             )
           else
-            ...users.take(5).map((user) => UserTableRow(
-                  name: user.userId,
+            ...displayedUsers.map((user) => UserTableRow(
+                  userId: user.id,
+                  name: user.name,
                   status: status,
                   date: user.getFormattedDate(),
-                  statusColor: statusColor,
+                  statusColor: widget.statusColor,
                   riskScore: user.riskScore,
                 )),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "แสดงผล ${users.length > 5 ? 5 : users.length} จากทั้งหมด ${users.length} รายการ",
+                  "แสดงผล ${displayedUsers.length} จากทั้งหมด ${widget.users.length} รายการ",
                   style: GoogleFonts.kanit(
                     fontSize: 12,
                     color: Colors.grey[600],
                   ),
                 ),
-                if (users.length > 5)
+                if (widget.users.length > 5)
                   TextButton(
                     onPressed: () {
-                      // เพิ่มฟังก์ชันเพื่อดูข้อมูลเพิ่มเติม
+                      setState(() {
+                        showAllUsers = !showAllUsers;
+                      });
                     },
                     child: Text(
-                      "ดูทั้งหมด",
+                      showAllUsers ? "ย่อรายการ" : "ดูทั้งหมด",
                       style: GoogleFonts.kanit(
                         fontSize: 12,
                         color: Colors.blue,
