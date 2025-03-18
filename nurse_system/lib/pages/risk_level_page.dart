@@ -387,6 +387,83 @@ class _RiskLevelPageState extends State<RiskLevelPage> {
                         },
                       ),
                       const SizedBox(height: 24),
+                      
+                      // ส่วนเพิ่มเติม (เช่น แนะนำการดูแล)
+                      Text(
+                        'คำแนะนำ',
+                        style: GoogleFonts.kanit(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: const Color(0xFF1F2251),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: riskColor.withOpacity(0.05),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: riskColor.withOpacity(0.15),
+                            width: 1.0,
+                          ),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  collection == 'high_risk_users'
+                                      ? Icons.warning_amber_rounded
+                                      : Icons.check_circle_outline,
+                                  color: riskColor,
+                                  size: 20,
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    collection == 'high_risk_users'
+                                        ? 'ผู้ใช้อยู่ในกลุ่มเสี่ยงสูง ควรได้รับการติดตามอย่างใกล้ชิด สำหรับอาการที่อาจเกิดขึ้น ควรแนะนำให้ผู้ใช้พบแพทย์เพื่อรับคำปรึกษาเพิ่มเติม'
+                                        : 'ผู้ใช้อยู่ในกลุ่มเสี่ยงต่ำ ควรแนะนำให้ดูแลสุขภาพตามปกติ และสังเกตอาการหากมีการเปลี่ยนแปลง',
+                                    style: GoogleFonts.kanit(
+                                      fontSize: 14,
+                                      height: 1.5,
+                                      color: const Color(0xFF424770),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+                            collection == 'high_risk_users'
+                                ? ElevatedButton.icon(
+                                    onPressed: () {
+                                      // โค้ดสำหรับการติดต่อกับผู้ใช้หรือเจ้าหน้าที่ดูแล
+                                      // อาจใช้ URL launcher หรือแสดง dialog เพิ่มเติม
+                                    },
+                                    icon: const Icon(Icons.contact_phone, size: 16),
+                                    label: Text(
+                                      "ติดต่อเจ้าหน้าที่",
+                                      style: GoogleFonts.kanit(),
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: riskColor,
+                                      foregroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16, vertical: 10),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      
                       // ประวัติการประเมิน
                       Text(
                         'ประวัติการประเมิน',
@@ -557,7 +634,9 @@ class _RiskLevelPageState extends State<RiskLevelPage> {
                       const SizedBox(width: 12),
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            // โค้ดสำหรับการอัพเดตหรือดำเนินการต่อ
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: riskColor,
                             foregroundColor: Colors.white,
