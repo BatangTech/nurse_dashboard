@@ -6,10 +6,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
       options: FirebaseOptions(
-          apiKey: "AIzaSyDTccw-bA9QTyCaxvwlbWKYMyLS3x1a4KM",
-          projectId: "ncds-user-app",
-          messagingSenderId: "647448783618",
-          appId: "1:647448783618:web:8eedcca497bfbdb370f01b"));
+          apiKey: "",
+          projectId: "",
+          messagingSenderId: "",
+          appId: ""));
 
   runApp(const MyApp());
 }
