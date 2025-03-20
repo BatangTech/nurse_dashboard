@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:nurse_system/components/login/custom_text_field.dart';
+import 'package:nurse_system/components/login/error_message.dart';
+import 'package:nurse_system/components/login/login_button.dart';
+import 'package:nurse_system/components/login/login_footer.dart';
+import 'package:nurse_system/components/login/login_header.dart';
+import 'package:nurse_system/constants/styles.dart';
+import 'package:nurse_system/services/auth_service.dart';
+import 'package:nurse_system/services/log_service.dart';
 import 'dashboard_pages.dart';
 
 class LoginPage extends StatefulWidget {
@@ -12,13 +20,10 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   bool _isPasswordVisible = false;
   bool _isLoading = false;
   String _errorMessage = '';
-  String _debugInfo = '';
-
-  final String _adminUsername = 'admin@ncds.com';
-  final String _adminPassword = 'admin123456';
 
   @override
   void dispose() {
@@ -28,49 +33,25 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _handleLogin() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
     setState(() {
       _isLoading = true;
       _errorMessage = '';
-      _debugInfo = '';
     });
 
     try {
       final username = _usernameController.text.trim();
       final password = _passwordController.text.trim();
 
-      setState(() {
-        _debugInfo = 'Entered: "$username" / "$password"\n'
-            'Expected: "$_adminUsername" / "$_adminPassword"';
-      });
+      final authResult = await AuthService.login(username, password);
 
-      if (username == _adminUsername && password == _adminPassword) {
+      if (authResult.success) {
         try {
-          String platform = 'Unknown';
-          try {
-            if (Theme.of(context).platform == TargetPlatform.android) {
-              platform = 'Android';
-            } else if (Theme.of(context).platform == TargetPlatform.iOS) {
-              platform = 'iOS';
-            } else if (Theme.of(context).platform == TargetPlatform.windows) {
-              platform = 'Windows';
-            } else if (Theme.of(context).platform == TargetPlatform.macOS) {
-              platform = 'macOS';
-            } else if (Theme.of(context).platform == TargetPlatform.linux) {
-              platform = 'Linux';
-            } else if (Theme.of(context).platform == TargetPlatform.fuchsia) {
-              platform = 'Fuchsia';
-            } else {
-              platform = 'Web/Unknown';
-            }
-          } catch (e) {
-            platform = 'Error detecting platform';
-          }
-
-          await FirebaseFirestore.instance.collection('admin_logs').add({
-            'adminEmail': _adminUsername,
-            'loginTime': FieldValue.serverTimestamp(),
-            'device': platform,
-          });
+          final platform = await LogService.detectPlatform(context);
+          await LogService.logAdminLogin(username, platform);
         } catch (e) {
           print('Failed to log admin login: $e');
         }
@@ -82,12 +63,12 @@ class _LoginPageState extends State<LoginPage> {
         );
       } else {
         setState(() {
-          _errorMessage = 'Invalid admin credentials';
+          _errorMessage = 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง';
         });
       }
     } catch (e) {
       setState(() {
-        _errorMessage = 'An error occurred: $e';
+        _errorMessage = 'เกิดข้อผิดพลาด: $e';
       });
     } finally {
       if (mounted) {
@@ -100,123 +81,92 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final backgroundColor =
+        isDarkMode ? AppStyles.darkBackground : AppStyles.lightBackground;
+    final textColor =
+        isDarkMode ? AppStyles.darkTextColor : AppStyles.lightTextColor;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: backgroundColor,
       body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/images/robot.png',
-                  height: 150,
-                ),
-                const SizedBox(height: 20),
-                const Text(
-                  "ADMIN NCDS",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                TextField(
-                  controller: _usernameController,
-                  decoration: InputDecoration(
-                    hintText: "Enter Username Or Email",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide.none,
-                    ),
-                    filled: true,
-                    fillColor: Colors.grey[200],
-                    prefixIcon: const Icon(Icons.person_outline),
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: 15,
-                      horizontal: 20,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 15),
-                TextField(
-                  controller: _passwordController,
-                  obscureText: !_isPasswordVisible,
-                  decoration: InputDecoration(
-                    hintText: "Password",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(15),
-                      borderSide: BorderSide.none,
-                    ),
-                    filled: true,
-                    fillColor: Colors.grey[200],
-                    prefixIcon: const Icon(Icons.lock_outline),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _isPasswordVisible
-                            ? Icons.visibility
-                            : Icons.visibility_off,
+        child: Form(
+          key: _formKey,
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 450),
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    LoginHeader(textColor: textColor),
+                    const SizedBox(height: 40),
+                    Text(
+                      "ชื่อผู้ใช้หรืออีเมล",
+                      style: GoogleFonts.prompt(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: textColor,
                       ),
-                      onPressed: () {
+                    ),
+                    const SizedBox(height: 8),
+                    CustomTextField(
+                      controller: _usernameController,
+                      textColor: textColor,
+                      hintText: "กรอกชื่อผู้ใช้หรืออีเมล",
+                      icon: Icons.person_outline,
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'กรุณากรอกชื่อผู้ใช้หรืออีเมล';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      "รหัสผ่าน",
+                      style: GoogleFonts.prompt(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: textColor,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    CustomTextField(
+                      controller: _passwordController,
+                      textColor: textColor,
+                      hintText: "กรอกรหัสผ่าน",
+                      icon: Icons.lock_outline,
+                      isPassword: true,
+                      isPasswordVisible: _isPasswordVisible,
+                      onTogglePasswordVisibility: () {
                         setState(() {
                           _isPasswordVisible = !_isPasswordVisible;
                         });
                       },
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'กรุณากรอกรหัสผ่าน';
+                        }
+                        return null;
+                      },
                     ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: 15,
-                      horizontal: 20,
+                    if (_errorMessage.isNotEmpty) ...[
+                      const SizedBox(height: 16),
+                      ErrorMessage(message: _errorMessage),
+                    ],
+                    const SizedBox(height: 32),
+                    LoginButton(
+                      onPressed: _handleLogin,
+                      isLoading: _isLoading,
                     ),
-                  ),
+                    const SizedBox(height: 24),
+                    LoginFooter(textColor: textColor),
+                  ],
                 ),
-                if (_errorMessage.isNotEmpty) ...[
-                  const SizedBox(height: 10),
-                  Text(
-                    _errorMessage,
-                    style: const TextStyle(color: Colors.red, fontSize: 14),
-                  ),
-                ],
-                if (_debugInfo.isNotEmpty) ...[
-                  const SizedBox(height: 10),
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[100],
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Text(
-                      _debugInfo,
-                      style: const TextStyle(
-                        fontFamily: 'monospace',
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                ],
-                const SizedBox(height: 20),
-                _isLoading
-                    ? const CircularProgressIndicator(color: Colors.black)
-                    : ElevatedButton(
-                        onPressed: _handleLogin,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 15,
-                            horizontal: 80,
-                          ),
-                        ),
-                        child: const Text(
-                          "Login",
-                          style: TextStyle(fontSize: 16, color: Colors.white),
-                        ),
-                      ),
-              ],
+              ),
             ),
           ),
         ),

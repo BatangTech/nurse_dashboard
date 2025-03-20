@@ -6,8 +6,6 @@ import '../components/table/user_table_section.dart';
 import '../models/user_model.dart';
 import '../services/firebase_service.dart';
 
-
-
 class TablePage extends StatefulWidget {
   const TablePage({super.key});
 
@@ -21,7 +19,7 @@ class _TablePageState extends State<TablePage> {
   List<UserModel> highRiskUsers = [];
   List<UserModel> lowRiskUsers = [];
   bool isLoading = true;
-  
+
   final FirebaseService _firebaseService = FirebaseService();
 
   @override
@@ -38,7 +36,7 @@ class _TablePageState extends State<TablePage> {
 
     try {
       final result = await _firebaseService.fetchAllUserData();
-      
+
       setState(() {
         users = result['users']!;
         highRiskUsers = result['highRiskUsers']!;
@@ -56,7 +54,7 @@ class _TablePageState extends State<TablePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FF),
+      backgroundColor: const Color(0xFFF8F9FA),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),

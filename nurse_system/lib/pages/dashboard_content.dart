@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../components/dashboard/risk_distribution_cards.dart';
 import '../components/dashboard/risk_trend_chart.dart';
 import '../components/dashboard/risk_zone_table.dart';
-import '../constants/colors.dart';
+
 
 class DashboardContent extends StatefulWidget {
   const DashboardContent({Key? key}) : super(key: key);
@@ -18,7 +18,7 @@ class _DashboardContentState extends State<DashboardContent> {
     return SingleChildScrollView(
       child: Container(
         padding: const EdgeInsets.all(24),
-        color: AppColors.backgroundColor,
+        color: const Color(0xFFF8F9FA),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
