@@ -6,22 +6,23 @@ class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
 
   @override
-  State<DashboardPage> createState() => _DashboardPageState();
+  State createState() => _DashboardPageState();
 }
 
-class _DashboardPageState extends State<DashboardPage> {
+class _DashboardPageState extends State {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = [
+  final List _pages = [
     const DashboardContent(),
     const TablePage(),
   ];
 
   void _handleNavigation(int index) {
-    if (index == 3) {
+    if (index == 2) {
       _handleSignOut();
       return;
     }
+
     setState(() {
       _selectedIndex = index;
     });
