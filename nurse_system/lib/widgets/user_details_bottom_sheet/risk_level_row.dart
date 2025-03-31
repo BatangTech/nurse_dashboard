@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../../../pages/risk_level_page.dart';
 
 class RiskLevelRow extends StatelessWidget {
@@ -43,9 +42,7 @@ class RiskLevelRow extends StatelessWidget {
               const SizedBox(width: 8),
               InkWell(
                 onTap: () {
-                  // ปิด bottom sheet ปัจจุบัน
                   Navigator.pop(context);
-                  // นำทางไปยังหน้า RiskLevelPage
                   showDialog(
                     context: context,
                     builder: (context) => RiskLevelPage(userId: userId),

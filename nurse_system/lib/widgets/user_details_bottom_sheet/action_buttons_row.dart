@@ -21,9 +21,7 @@ class ActionButtonsRow extends StatelessWidget {
           label: 'ดูระดับความเสี่ยง',
           color: Colors.orange,
           onTap: () {
-            // ปิด bottom sheet ปัจจุบัน
             Navigator.pop(context);
-            // นำทางไปยังหน้า RiskLevelPage
             showDialog(
               context: context,
               builder: (context) => RiskLevelPage(userId: userId),
