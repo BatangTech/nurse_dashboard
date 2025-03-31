@@ -16,7 +16,6 @@ class InterviewService {
     required bool sendReminder,
     required String Function(TimeOfDay) timeFormat,
   }) async {
-    // Convert TimeOfDay to string using context
     final TimeOfDay selectedTime = TimeOfDay(
       hour: interviewDateTime.hour,
       minute: interviewDateTime.minute,

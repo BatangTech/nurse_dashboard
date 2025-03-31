@@ -6,7 +6,7 @@ class FirebaseService {
 
   Future<List<UserModel>> _fetchUserCollection(String collectionName) async {
     final snapshot =
-        await _firestore.collection(collectionName).limit(10).get();
+        await _firestore.collection(collectionName).get(); //.limit(10).get();
 
     return await Future.wait(
       snapshot.docs.map((doc) => UserModel.fromFirestore(doc)).toList(),
