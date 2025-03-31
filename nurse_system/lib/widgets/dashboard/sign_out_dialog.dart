@@ -1,4 +1,3 @@
-// widgets/dashboard/sign_out_dialog.dart
 import 'package:flutter/material.dart';
 import 'package:nurse_system/constants/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
