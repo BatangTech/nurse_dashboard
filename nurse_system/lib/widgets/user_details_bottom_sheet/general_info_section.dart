@@ -9,11 +9,12 @@ import 'risk_level_row.dart';
 class GeneralInfoSection extends StatelessWidget {
   final Map<String, dynamic> userData;
   final String userId;
-
+  final bool showRiskLevel;
   const GeneralInfoSection({
     super.key,
     required this.userData,
     required this.userId,
+    this.showRiskLevel = true,
   });
 
   @override
@@ -22,20 +23,20 @@ class GeneralInfoSection extends StatelessWidget {
       title: 'ข้อมูลทั่วไป',
       icon: Icons.analytics_outlined,
       children: [
-        RiskLevelRow(userData: userData, userId: userId),
+        if (showRiskLevel) RiskLevelRow(userData: userData, userId: userId),
         InfoRow(label: 'สถานะ', value: userData['status'] ?? 'ไม่ระบุ'),
         InfoRow(
           label: 'วันที่ลงทะเบียน',
           value: userData['registrationDate'] != null
-              ? DateFormat('dd/MM/yyyy').format(
-                  (userData['registrationDate'] as Timestamp).toDate())
+              ? DateFormat('dd/MM/yyyy')
+                  .format((userData['registrationDate'] as Timestamp).toDate())
               : 'ไม่ระบุ',
         ),
         InfoRow(
           label: 'ครั้งสุดท้ายที่เข้าใช้งาน',
           value: userData['lastActive'] != null
-              ? DateFormat('dd/MM/yyyy HH:mm').format(
-                  (userData['lastActive'] as Timestamp).toDate())
+              ? DateFormat('dd/MM/yyyy HH:mm')
+                  .format((userData['lastActive'] as Timestamp).toDate())
               : 'ไม่ระบุ',
         ),
       ],

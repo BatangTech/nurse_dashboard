@@ -1,4 +1,3 @@
-// interview_service.dart
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +19,7 @@ class InterviewService {
       hour: interviewDateTime.hour,
       minute: interviewDateTime.minute,
     );
-    
+
     DocumentReference interviewRef =
         await _firestore.collection('scheduled_interviews').add({
       'user_id': userId,
@@ -67,12 +66,13 @@ class InterviewService {
       });
     }
 
-    await _scheduleReminders(interviewRef.id, interviewDateTime, userId, timeFormat(selectedTime));
+    await _scheduleReminders(
+        interviewRef.id, interviewDateTime, userId, timeFormat(selectedTime));
   }
 
   Future<void> _scheduleReminders(
-    String interviewId, 
-    DateTime interviewDateTime, 
+    String interviewId,
+    DateTime interviewDateTime,
     String userId,
     String formattedTime,
   ) async {
@@ -82,8 +82,7 @@ class InterviewService {
       'reminder_time': Timestamp.fromDate(
           interviewDateTime.subtract(const Duration(days: 1))),
       'title': 'เตรียมความพร้อมสำหรับการสัมภาษณ์พรุ่งนี้',
-      'message':
-          'คุณมีการนัดหมายสัมภาษณ์ความเสี่ยงพรุ่งนี้เวลา $formattedTime',
+      'message': 'คุณมีการนัดหมายสัมภาษณ์ความเสี่ยงพรุ่งนี้เวลา $formattedTime',
       'is_sent': false,
       'created_at': FieldValue.serverTimestamp(),
     });
