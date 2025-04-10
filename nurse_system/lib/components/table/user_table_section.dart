@@ -1,6 +1,8 @@
+// แก้ไขส่วนของ UserTableSection class
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../models/user_model.dart';
+import 'all_users_table_row.dart';
 import 'table_header.dart';
 import 'table_row.dart';
 
@@ -34,6 +36,8 @@ class _UserTableSectionState extends State<UserTableSection> {
         : "Green zone";
     final displayedUsers =
         showAllUsers ? widget.users : widget.users.take(5).toList();
+
+    final bool isAllUsers = widget.title == "All Users";
 
     return Container(
       decoration: BoxDecoration(
@@ -99,6 +103,15 @@ class _UserTableSectionState extends State<UserTableSection> {
                 ),
               ),
             )
+          else if (isAllUsers)
+            ...displayedUsers.map((user) => AllUsersTableRow(
+                  userId: user.id,
+                  name: user.name,
+                  date: user.getFormattedDate(),
+                  statusColor: widget.statusColor,
+                  riskScore: user.riskScore,
+                  userEmail: user.email,
+                ))
           else
             ...displayedUsers.map((user) => UserTableRow(
                   userId: user.id,

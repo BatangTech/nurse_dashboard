@@ -10,10 +10,12 @@ import '../../widgets/user_details_bottom_sheet/user_profile_header.dart';
 
 class UserDetailsBottomSheet extends StatelessWidget {
   final String userId;
+  final bool isFromAllUsers;
 
   const UserDetailsBottomSheet({
     super.key,
     required this.userId,
+    this.isFromAllUsers = false,
   });
 
   @override
@@ -62,26 +64,30 @@ class UserDetailsBottomSheet extends StatelessWidget {
                 controller: scrollController,
                 padding: const EdgeInsets.all(16),
                 children: [
-                  // Handle
                   const SheetHandle(),
                   const SizedBox(height: 20),
 
-                  // User profile header
                   UserProfileHeader(userData: userData, userId: userId),
                   const SizedBox(height: 24),
 
-                  // User information sections
                   PersonalInfoSection(userData: userData),
                   const SizedBox(height: 16),
 
-                  GeneralInfoSection(userData: userData, userId: userId),
+                  GeneralInfoSection(
+                    userData: userData,
+                    userId: userId,
+                    showRiskLevel: !isFromAllUsers,
+                  ),
                   const SizedBox(height: 16),
 
                   MedicalInfoSection(userData: userData),
                   const SizedBox(height: 24),
 
                   // Action buttons
-                  ActionButtonsRow(userId: userId),
+                  ActionButtonsRow(
+                    userId: userId,
+                    isFromAllUsers: isFromAllUsers,
+                  ),
                 ],
               );
             },
