@@ -5,6 +5,7 @@ import 'dart:developer' as developer;
 class UserModel {
   final String id;
   final String name;
+  final String email;
   final Timestamp? lastActivity;
   final String riskScore;
   final Map<String, dynamic> additionalData;
@@ -12,6 +13,7 @@ class UserModel {
   UserModel({
     required this.id,
     required this.name,
+    this.email = '',
     this.lastActivity,
     required this.riskScore,
     this.additionalData = const {},
@@ -25,8 +27,8 @@ class UserModel {
     developer.log('Available keys: ${data.keys.toList()}');
 
     String? userId = data['user_id'] ?? data['uid'];
-
     String userName = 'User_${doc.id.substring(0, 5)}';
+    String userEmail = ''; 
 
     if (userId != null) {
       var userDoc = await FirebaseFirestore.instance
@@ -40,14 +42,18 @@ class UserModel {
             userData?['fullName'] ??
             userData?['email'] ??
             userName;
+
+        userEmail = userData?['email'] ?? '';
       }
     }
 
     developer.log('Final selected name: $userName');
+    developer.log('User email: $userEmail');
 
     return UserModel(
       id: doc.id,
       name: userName,
+      email: userEmail,
       lastActivity: data['last_activity'] as Timestamp? ??
           data['lastActive'] as Timestamp? ??
           data['lastActivity'] as Timestamp?,

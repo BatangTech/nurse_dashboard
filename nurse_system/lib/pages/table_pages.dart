@@ -14,13 +14,20 @@ class TablePage extends StatefulWidget {
 }
 
 class _TablePageState extends State<TablePage> {
-  // สถานะสำหรับเก็บข้อมูลจาก Firestore
   List<UserModel> users = [];
   List<UserModel> highRiskUsers = [];
   List<UserModel> lowRiskUsers = [];
   bool isLoading = true;
 
+  String selectedUserType = 'total';
+
   final FirebaseService _firebaseService = FirebaseService();
+
+  void changeSelectedUserType(String type) {
+    setState(() {
+      selectedUserType = type;
+    });
+  }
 
   @override
   void initState() {
@@ -28,7 +35,6 @@ class _TablePageState extends State<TablePage> {
     fetchData();
   }
 
-  // ดึงข้อมูลจาก Firestore
   Future<void> fetchData() async {
     setState(() {
       isLoading = true;
@@ -74,23 +80,34 @@ class _TablePageState extends State<TablePage> {
                         totalUsers: users.length,
                         lowRiskUsers: lowRiskUsers.length,
                         highRiskUsers: highRiskUsers.length,
+                        selectedType: selectedUserType,
+                        onTypeSelected: changeSelectedUserType,
                       ),
                       const SizedBox(height: 20),
-                      UserTableSection(
-                        title: "Red Zone Users",
-                        subtitle: "ผู้ใช้ในพื้นที่เสี่ยงสูง",
-                        users: highRiskUsers,
-                        statusColor: const Color(0xFFFF5252),
-                        icon: Icons.warning_rounded,
-                      ),
-                      const SizedBox(height: 20),
-                      UserTableSection(
-                        title: "Green Zone Users",
-                        subtitle: "ผู้ใช้ในพื้นที่ปลอดภัย",
-                        users: lowRiskUsers,
-                        statusColor: const Color(0xFF4CAF50),
-                        icon: Icons.shield_rounded,
-                      ),
+                      if (selectedUserType == 'high')
+                        UserTableSection(
+                          title: "Red Zone Users",
+                          subtitle: "ผู้ใช้ในพื้นที่เสี่ยงสูง",
+                          users: highRiskUsers,
+                          statusColor: const Color(0xFFFF5252),
+                          icon: Icons.warning_rounded,
+                        )
+                      else if (selectedUserType == 'low')
+                        UserTableSection(
+                          title: "Green Zone Users",
+                          subtitle: "ผู้ใช้ในพื้นที่ปลอดภัย",
+                          users: lowRiskUsers,
+                          statusColor: const Color(0xFF4CAF50),
+                          icon: Icons.shield_rounded,
+                        )
+                      else
+                        UserTableSection(
+                          title: "All Users",
+                          subtitle: "รายการผู้ใช้งานทั้งหมดในระบบ",
+                          users: users,
+                          statusColor: const Color(0xFF6C63FF),
+                          icon: Icons.people_alt_rounded,
+                        ),
                     ],
                   ),
                 ),
